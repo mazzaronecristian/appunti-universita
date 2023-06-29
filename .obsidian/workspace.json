@@ -1,0 +1,166 @@
+{
+  "main": {
+    "id": "18aa4e777a3d9a41",
+    "type": "split",
+    "children": [
+      {
+        "id": "13cc14d852d97975",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4b1af86097b9749f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Sistemi Operativi/Sistemi Operativi.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "000c0c1a7bb3d189",
+    "type": "split",
+    "children": [
+      {
+        "id": "650166e19d0bd384",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cefb32d794c214bc",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "63e8c247402c4a87",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8f57dc367f5aefdc",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ee60c6f49fa561d1",
+    "type": "split",
+    "children": [
+      {
+        "id": "3dae2cf717604773",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a419d7f871bed6c6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Sistemi Operativi/Sistemi Operativi.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "2f7a7832c9cef11f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Sistemi Operativi/Sistemi Operativi.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "784309ab6c0dd960",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "9b82209ff652a8d1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Sistemi Operativi/Sistemi Operativi.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "cefb32d794c214bc",
+  "lastOpenFiles": [
+    "Untitled",
+    "Sistemi Operativi/images/architettura-vmware.png",
+    "Sistemi Operativi/images/architettura-intel.png",
+    "Sistemi Operativi/images/algoritmo-singola-istanza.png",
+    "Sistemi Operativi/images/active-expired.png",
+    "Sistemi Operativi/images/5-filosofi.png",
+    "Sistemi Operativi/images/variabili-condizionali.png",
+    "Sistemi Operativi/images/TLB-paginazione.png",
+    "Sistemi Operativi/images/tabella-pagine-invertita.png",
+    "Sistemi Operativi/images/tabella-due-livelli.png",
+    "Sistemi Operativi/images/system-call.png",
+    "Sistemi Operativi/Sistemi Operativi.md",
+    "Sistemi Operativi/images",
+    "Sistemi Operativi"
+  ]
+}
