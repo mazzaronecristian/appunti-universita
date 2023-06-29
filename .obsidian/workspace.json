@@ -128,13 +128,21 @@
                 "file": "Sistemi Operativi/Sistemi Operativi.md"
               }
             }
+          },
+          {
+            "id": "b73cb11f71fd3074",
+            "type": "leaf",
+            "state": {
+              "type": "dictionary-view",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -146,7 +154,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "cefb32d794c214bc",
+  "active": "b73cb11f71fd3074",
   "lastOpenFiles": [
     "Untitled",
     "Sistemi Operativi/images/architettura-vmware.png",
