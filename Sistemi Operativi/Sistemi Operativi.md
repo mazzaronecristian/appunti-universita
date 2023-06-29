@@ -109,16 +109,16 @@ La gestione degli accessi alle varie periferiche non è più delegata alla CPU, 
 ![DMA](images/dma.png)
 
 Vediamo le operazioni: 
-+ l'interfaccia richiede il servzio DMA attraverso DMAREQ;
-+ DMAC richede alla CPU L'uso del bus tramite BUSREQ;
++ l'interfaccia richiede il servizio DMA attraverso DMAREQ;
++ DMAC richiede alla CPU L'uso del bus tramite BUSREQ;
 + la CPU concede il bus al DMAC (BUSACK), fintanto che il DMAC non ha finito di usare il bus (finché BUSREQ asserito);
-+ il DMAC mette l'indirizzo sul bus indirizi, attiva MR e IOW, o MW e IOR;
++ il DMAC mette l'indirizzo sul bus indirizzi, attiva MR e IOW, o MW e IOR;
 + La periferica legge/scrive sul bus dati il dato da trasferire;
 + finito il trasferimento, DMAC disattiva BUSREQ e la CPU riprende il controllo del bus e disattiva BUSACK.
 
 Come è fatto un DMA? L'architettura prevede un contatore del numero di caratteri/parole da trasferire, un puntatore (registro indirizzo) alla posizione dove andrà scritto/letto il dato in memoria, un registro di comando con il tipo di trasferimento e un registro di stato.
 E' prevista una fase di programmazione del DMA, in cui si settano i registri del DMA.
-Il trasferimento puù essere: 
+Il trasferimento più essere: 
 
 + singolo: il DMA trasferisce un singolo carattere
 + a blocchi: trasferisce tutte le parole indicate dal contatore e al termine del trasferimento viene generata un'interruzione.
@@ -134,7 +134,7 @@ Le interruzioni sono molto importanti per i **Sistemi Operativi**, che sono per 
 ## Introduzione ai Sistemi Operativi
 
 Un sistema operativo è un programma che agisce da intermediario tra l'utente e l'hardware. Il suo scopo è quello di fornire un'interfaccia semplice e unificata per l'utente, nascondendo i dettagli dell'hardware. Inoltre, il sistema operativo deve gestire le risorse hardware in modo da ottimizzare l'uso delle risorse e garantire l'equità nell'accesso alle risorse.
-Un sistema operativo deve rendere conveniente l'uso del calclatore, che può essere diviso in 4 componenti:
+Un sistema operativo deve rendere conveniente l'uso del calcolatore, che può essere diviso in 4 componenti:
 
   + **Hardware** che fornisce i componenti di base per l'elaborazione dei dati:
     + CPU
@@ -719,7 +719,7 @@ Un Thread può trovarsi in uno sei seguenti stati:
 
 ## Scheduling della CPU
 
-Lo scheduling della CPU permette di utlizzare la massimo le risorse della CPU, attraverso la multiprogrammazione: sfruttiamo le fasi in cui un processo è in attesa per assegnare nuovi processi alla CPU. <br>
+Lo scheduling della CPU permette di utilizzare la massimo le risorse della CPU, attraverso la multiprogrammazione: sfruttiamo le fasi in cui un processo è in attesa per assegnare nuovi processi alla CPU. <br>
 L'esecuzione dei processi consiste di un ciclo di esecuzione in CPU e attesa di una periferica. La fase il cui il processo lavora con il processore è detta CPU burst. Le applicazioni possono essere CPU bound (tanti processi che durano poco), oppure I/O bound (pochi processi che durano tanto).
 
 Lo **scheduler della CPU** seleziona tra i processi in memoria che sono pronti per essere eseguiti e li assegna alla CPU (*scheduling di breve durata*). Lo scheduler prende delle decisioni sul processo da assegnare alla CPU quando un processo passa: 
