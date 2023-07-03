@@ -1917,4 +1917,9 @@ Se un processo non ha abbastanza pagine in memoria, la frequenza dei page fault 
 + un altro processo aggiunto al sistema...che peggiora ulteriormente la situazione
 Questo problema è detto trashing: il sistema è occupato quasi esclusivamente a fare swap delle pagine da e al disco. 
 
+Gli effetti di questa complicazione possono essere limitati, applicando un algoritmo di sostituzione locale: se un processo entra in trashing, durante il page fault può riusare solo un frame già posseduto da lui, non può rubare frame ad altri processi che entrerebbero a loro volta in trashing. In ogni caso, il trashing rallenta indirettamente anche l'esecuzione di altri processi, aumentando il tempo di gestione del page fault. 
+Un altro modo per evitare il trashing è quello di far memorizzare a ogni processo in esecuzione i frame che gli servono in quel momento (working-set), generando pochi page fault.
+
+Il working-set è definito come l'insieme delle pagine riferite dal processo in un certo numero di riferimenti in memoria. La dimensione del working set cambia durante l'esecuzione del processo,  
+
 
