@@ -1905,3 +1905,6 @@ Riprendiamo la sequenza precedente:
 ![sostituzione-lru](images/sostituzione-lru.png)
 
 La sostituzione LRU non soffre della anomalia di Belady.
+L'implementazione può essere fatta in due modi:
++ Con un contatore: viene incrementato ad ogni accesso in memoria ed è associato a ogni uso di una pagina; viene scelta la pagina con il valore più piccolo.
++ Con uno stack: ogni volta che una pagina viene usata, viene inserita in testa allo stack; in fondo allo stack si troverà la pagina che è stat usa
