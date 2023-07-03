@@ -1880,6 +1880,7 @@ In caso non ci sia un frame libero nella memoria fisica, allora il sistema opera
 L'algoritmo da scegliere, deve produrre il minor numero possibile di page fault, in modo da incrementare le performance. 
 Introduciamo un parametro: Frequenza di Page Fault p (0<p<1). 
 Il tempo effettivo di accesso (EAT) diventa: 
-+ EAT = (1-p)* accesso 
++ EAT = *(1-p)  accesso in memoria + p (tempo di page fault+ [tempo di swap page out] + tempo swap page in + tempo restart istruzione)*
+
 
 
