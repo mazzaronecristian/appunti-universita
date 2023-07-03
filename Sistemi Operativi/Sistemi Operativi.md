@@ -1,4 +1,4 @@
-## Gestione input/output e interruzioni E MOLTO ALTRO
+## Gestione input/output e interruzioni
 
 Le componenti di un calcolatore sono:
 
