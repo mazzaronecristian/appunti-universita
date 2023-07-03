@@ -1892,8 +1892,16 @@ La politica FIFO presenta una anomalia, detta di Belady: aumentando il numero di
 
 ### Sostituzione ottimale
 Questa politica consiste nel sostituire la pagina che non verrà usata per il più lungo periodo di tempo, assicurando il tasso minimo di page fault. Questa sostituzione è chiaramente impossibile, dato che dovremmo avere delle informazioni certe sul prossimo futuro, ma è alla base degli algoritmi più usati per risolvere il problema della sostituzione.
+Riprendiamo la sequenza precedente:
++ 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1
+
+![sostituzione-ottimale](images/sostituzione-ottimale.png)
 
 ### Sostituzione LRU
+Viene scelta la **pagina** usata meno di recente.  
+Riprendiamo la sequenza precedente:
++ 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1
 
+![sostituzione-lru](images/sostituzione-lru.png)
 
-
+La sostituzione LRU non soffre della anomalia di Belady.
