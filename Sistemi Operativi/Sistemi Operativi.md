@@ -1872,5 +1872,7 @@ durante la traduzione dell'indirizzo, se il bit è a 0, allora si genera una ecc
 
 ![page-fault](images/page-fault.png)
 
+Il passo 4 richiede parecchio tempo. Nel mentre la CPU prosegue eseguendo altri processi pronti per esecuzione, per non sprecare tempo prezioso. 
+In caso non ci sia un frame libero nella memoria fisica, allora il sistema operativo procede con la sostituzione di una pagina in memoria non utilizzata. Ci sono varie tecniche per scegliere la pagina da estrarre: 
 
 
