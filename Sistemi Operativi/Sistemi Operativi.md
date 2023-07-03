@@ -1872,7 +1872,14 @@ durante la traduzione dell'indirizzo, se il bit è a 0, allora si genera una ecc
 
 ![page-fault](images/page-fault.png)
 
-Il passo 4 richiede parecchio tempo. Nel mentre la CPU prosegue eseguendo altri processi pronti per esecuzione, per non sprecare tempo prezioso. 
-In caso non ci sia un frame libero nella memoria fisica, allora il sistema operativo procede con la sostituzione di una pagina in memoria non utilizzata. Ci sono varie tecniche per scegliere la pagina da estrarre: 
+Il passo 4 richiede parecchio tempo. Nel mentre la CPU prosegue eseguendo altri processi pronti per esecuzione, per non sprecare tempo prezioso (siamo nell'ordine dei millisecondi: tempo enorme per una CPU!!). 
+In caso non ci sia un frame libero nella memoria fisica, allora il sistema operativo procede con la **sostituzione** di una pagina in memoria non utilizzata. Ci sono varie tecniche per scegliere la pagina da estrarre:
++ coda FIFO
++ LRU - Least Recently Used
++ Varianti della precedente
+L'algoritmo da scegliere, deve produrre il minor numero possibile di page fault, in modo da incrementare le performance. 
+Introduciamo un parametro: Frequenza di Page Fault p (0<p<1). 
+Il tempo effettivo di accesso (EAT) diventa: 
++ EAT = (1-p)* accesso 
 
 
