@@ -136,9 +136,17 @@
               "type": "dictionary-view",
               "state": {}
             }
+          },
+          {
+            "id": "9648b5520d533383",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-chat-view",
+              "state": {}
+            }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -155,7 +163,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b73cb11f71fd3074",
+  "active": "9648b5520d533383",
   "lastOpenFiles": [
     "Untitled",
     "Sistemi Operativi/images/architettura-vmware.png",
