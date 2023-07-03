@@ -1700,7 +1700,6 @@ Il probelma di questa tecnica è che la memoria può essere **frammentata**, ovv
 La frammentaione appena descritta è detta **frammentazione esterna**. Esiste anche la **frammentazione interna**, che si ha quando la memoria allocata è maggiore di quella richiesta, causando quindi uno spreco di spazio di memoria. <br>
 
 ### Segmentazione
-
 La segmentazione è una tecnica di gestione della memoria che supporta la condivisione e la protezione dei processi. Un programma è diviso in segmenti logici, come codice, dati, stack, procedure, array, etc... Ogni segmento ha un nome e una lunghezza. <br>
 
 ![segmentazione](images/segmentazione.png)
@@ -1729,7 +1728,6 @@ Vediamo cosa succede se due processi condividono il segmento *editor*: il SO lan
 ![segmenti-condivisi](images/segmenti-condivisi.png)
 
 ### Paginazione
-
 Lo spazio degli indirizzi logici di un processo può non essere contiguo; un processo è allocato nella memoria fisica dove questa è libera. La memoria fisica è divisa in blocchi di dimensione fissa, detti **frame**. La memoria logica è divisa in blocchi di uguale dimensione, detti **pagine**. La dimensione di questi blocchi è una potenza del due, solitamente va dai 512 byte ai 8192 byte. <br>
 Per eseguire un programma che usa n pagine, il sistema operativo deve trovare n frame liberi per caricare il programma nella memoria fisica. Inoltre, il SO deve mantenere impostare una tabella delle pagine per tradurre un indirizzo logico in un indirizzo fisicio (ogni processo ha la sua tabella). <br>
 Questo sistema risolve il problema della frammentazione esterna, ma è soggetto a frammentazione interna, in quanto un processo può usare solo un numero intero di frame. <br>
@@ -1797,7 +1795,6 @@ Gli indirizzi vengono tradotti in questo modo:
 Il vantaggio di questa tecnica è che non è necessario allocare tutta la tabella delle pagine, ma solo le parti necessarie. <br>
 
 #### Tabella delle pagine di tipo hash
-
 Questa tecnica è molto comune quando si ha a che fare con indirizzi > 32 bit, in cui la tabella delle pagine avrebbe una dimensione troppo grande. <br>
 Facciamo un esempio con 64 bit per gli indirizzi e 4k (2<sup>12</sup>), quindi 12 bit per offset e 52 bit per il numero di pagina; questo porta a una tabella da *2<sup>52</sup>***4 = 16384TB*. <br>
 Usa una tabella hash per associare al numero di pagina il frame. Ogni riga della tabella hash contiene una catena di elementi che hanno lo stesso valore hash. Il numero di pagina viene comparato con gli elementi della catiena fno a trovare il frame associato alla pagina: 
@@ -1807,7 +1804,6 @@ Usa una tabella hash per associare al numero di pagina il frame. Ogni riga della
 In questo caso **l'utilizzo della TLB è fondamentale**, in quanto vengono effettuati molti accessi alla memoria. 
 
 #### Tabella delle pagine invertite
-
 In questo caso la tabella contiene una riga per ogni pagina reale in memoria. Nella riga associata a un frame troviamo il numero di pagina mappato in quel frame e le informazioni sul processo che possiane la pagina (pid)
 
 ![tabella-pagine-invertita](images/tabella-pagine-invertita.png)
@@ -1852,7 +1848,6 @@ Con 32 bit si possono codificare 4GB di memoria, che non è abbastanza. Per ques
 Ci sono altre architetture come la ARM e l'Architettura x86 a 64 bit. Vedere le slide. 
 
 ## Memoria virtuale
-
 La memoria virtuale consiste nella separazione della memoria logica dalla memoria fisica. Si basa sul fatto che solo una parte del programma ha la necessità di essere in memoria per esse eseguito, e che non tutti i dati in memoria vengono utilizzati contemporaneamente. 
 Serve ad aumentare il grado di multiprogrammazione del sistema e viene implementata attraverso la paginazione su richiesta. 
 
@@ -1883,18 +1878,22 @@ Il tempo effettivo di accesso (EAT) diventa:
 + EAT = *(1-p)  accesso in memoria + p (tempo di page fault+ [tempo di swap page out] + tempo swap page in + tempo restart istruzione)*
 
 ### Sostituzione delle pagine
-
 Può accadere che il sistema stia usando tutta la memoria disponibile. In questo caso il SO trova la lista dei frame liberi vuota e deve scegliere quale liberare. In generale, il frame da riusare va prima scritto su disco e poi sostituito con il nuovo frame. Quest'ultimo passo può essere evitato, se la pagina non è stata modificata.
 Per ogni processo andiamo a considerare la sequenza delle pagine utilizzate, con tenendo di conto dei riferimento immediatamente successivi alla stessa pagina. In generale. aumentando il numero di frame, i page fault diminuiranno. 
 
 #### Sostituzione FIFO
-
 Si sostituisce la pagina presente da più tempo. Supponiamo che un processo abbia questa successione dei riferimenti: 
 + 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1
 e supponiamo di avere 3 frame in memoria
 
 ![sostituzione-fifo](images/sostituzione-fifo.png)
 
-La politica FIFO presenta una anomalia, detta di Belady: aumentando il numero di frame
+La politica FIFO presenta una anomalia, detta di Belady: aumentando il numero di frame, aumenta il numero di page fault. 
+
+### Sostituzione ottimale
+Questa politica consiste nel sostituire la pagina che non verrà usata per il più lungo periodo di tempo, assicurando il tasso minimo di page fault. Questa sostituzione è chiaramente impossibile, dato che dovremmo avere delle informazioni certe sul prossimo futuro, ma è alla base degli algoritmi più usati per risolvere il problema della sostituzione.
+
+### Sostituzione LRU
+
 
 
