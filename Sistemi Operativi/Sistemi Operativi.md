@@ -1895,6 +1895,6 @@ e supponiamo di avere 3 frame in memoria
 
 ![sostituzione-fifo](images/sostituzione-fifo.png)
 
-
+La politica FIFO presenta una anomalia, detta di Belady: aumentando il numero di frame
 
 
