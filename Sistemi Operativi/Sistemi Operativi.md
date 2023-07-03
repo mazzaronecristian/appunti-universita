@@ -1855,3 +1855,10 @@ Serve ad aumentare il grado di multiprogrammazione del sistema e viene implement
 
 ![memoria-virtuale](images/memoria-virtuale.png)
 
+La memoria virtuale è vista come un'estensione della memoria fisica.
+
+La **paginazione su richiesta** porta una pagina in memoria solo quando è necessario. Questo permette di aumentare il grado di multiprogrammazione del sistema e diminuisce la memoria necessaria. 
+Se una pagina è necessaria, allora si referenzia: 
+
++ se il riferimento è errato, allora si verifica un abort;
++ se non è in memoria, allora la pagine viene 
