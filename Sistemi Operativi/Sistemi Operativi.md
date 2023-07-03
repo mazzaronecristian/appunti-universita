@@ -1,28 +1,21 @@
 ## Gestione input/output e interruzioni
 
 Le componenti di un calcolatore sono:
-
 + **CPU** (Central Processing Unit): elabora i dati
 + **Memoria**: memorizza i dati
 + **Dispositivi di I/O** (Input/Output): permettono di comunicare con l'esterno (es. Tastiera schermo, dischi rigidi ecc.)
 + **Bus** (dati, indirizzi, controllo): permette di collegare le componenti tra loro
-
-
 I dispositivi di input/output comunicano col bus tramite le interfacce, le quali leggono dal bus indirizzi, leggono e scrivono sul bus dati e leggono e scrivono sul bus di controllo. Grazie alle interfacce i dispositivi e la CPU possono procedere in modo **asincrono**, ognuno alla propria velocità (la CPU è molto più veloce dei dispositivi di I/O).
 L'interfaccia fornisce i seguenti pseudo-registri:
-
 + DREG: per lo scambio dati
 + CREG: per i comandi alla periferica
 + SREG: per leggere lo stato della periferica
-  
 La CPU accede ai registri delle interfacce con le seguenti tecniche:
 + I/O mappato in memoria: una parte della memoria è dedicata alla comunicazione con i dispositivi di I/O
 + I/O isolato: la CPU accede ai dispositivi di I/O tramite istruzioni dedicate (IN, OUT), e interagiscono i dispositivi tramite porte identificate da un numero (es. 21H). Lo spazio di indirizzamento è distinto da quello della memoria.
-
 Nel sistema isolato, le istruzioni dedicate per l'I/O generano dei cicli di bus analoghi alle altre istruzioni, solo che vengono usate due linee distinte:
 + IORC (read command)
 + IOWC (write command)
-
 Il processore x86 usa il metodo I/O isolato.
 
 ### Porte dell'interfaccia I/O
@@ -30,27 +23,22 @@ Il processore x86 usa il metodo I/O isolato.
 ![Interfaccia di I/O](images/interfaccia-io.png)
 
 + **Porte di input** dalla periferica: presentano un buffer three-state; l'uscita è abilitata quando IORC è asserito
-+ **Porte di output** verso la periferica: dotate di latch per memorizzare il dato; l'acquisizione avviene quando IOWC è asserito.
-  
++ **Porte di output** verso la periferica: dotate di latch per memorizzare il dato; l'acquisizione avviene quando IOWC è asserito.  
 Il buffer è essenziale! In quanto la CPU è molto più veloce delle periferiche, quindi potrebbe leggere o scrivere prima che la periferica sia pronta. Infatti non vi è nessun tipo di sincronizzazione tra programma in esecuzione e periferiche.
 
 ### Modalità di esecuzione I/O
-
 Le tecniche fondamentali per la gestione delle periferiche sono:
-+ gestine a controllo di programma (obsoleta)
++ gestione a controllo di programma (obsoleta)
 + sotto controllo di interruzione
 + tramite accesso diretto alla memoria (DMA)
-
 le prime due sono applicate quando si ha a che fare con dispositivi lenti (tipo le stampanti), mentre l'ultima è perfetta per dispositivi che trasmettono grandi quantità di memoria (tipo gli hard disk).
 
 #### Controllo di programma
-
 Consideriamo una periferica molto lenta come la stampante. Questa tecnica implementa un protocollo di hand shaking tra la CPU e la periferica:
 + DAV (Data Available): indica che il dato è disponibile
 + DAC (Acknowledge): indica che il dato è stato ricevuto e che la CPU può inviarne un altro
 Il DAV è generato dalla CPU, mentre il DAC dalla periferica. Il secondo serve per evitare che la CPU sovrascriva il dato prima che la periferica lo abbia ricevuto. Il problema è che la CPU spreca un sacco di tempo aspettando che la periferica invii il DAC:
 <br>
-
 ```assembly
 STAMPA: MOV AL,[SI]
         OUT E1H,AL
@@ -61,17 +49,15 @@ ATTESA: IN AL,E1H       ;
         LOO STAMPA
         RET        
 ```
+
 nel loop di attesa, la CPU spreca tempo (attesa **attiva**) 
 
 #### Sotto controllo di interruzione
-
 Per risolvere il problema dell'attesa attiva, si usa il controllo di interruzione. All'interruzione viene eseguita una routine di servizio (ISR) che si occupa di gestire la periferica. Il programma principale non si occupa più di gestire la periferica, ma si limita a inviare i dati. L'esecuzione della routine avviene tra l'esecuzione di due istruzioni.
 
 Ipotizziamo un modello semplificato che gestisce una sola periferica. L  linea INTR in ingresso alla CPU indica una richiesta di interruzione, che può essere attivato solo se la CPU ha abilitato le interruzioni attraverso il flag IE. Quando viene riconosciuta una interruzione IINTR la CPU deve azzerare IE, in modo da non essere interrotta, e fare fetch dell'istruzione all'indirizzo 0 (senza tocca il PC). A tale indirizzo dovrà essere presente una CALL alla procedura di gestione dell'interrupt. la procedura termina con **IRET**, che ripristina il valore di IE e riprende l'esecuzione del programma principale.
 
-
 vediamo di cosa si occupa la routine di servizio:
-
 + salvare sullo stack **PSW** e registri utilizzati;
 + trasferire il prossimo dato 
 + disasserire la richiesta di interruzione (altrimenti ripartirebbe subito l'interrupt)
@@ -79,7 +65,6 @@ vediamo di cosa si occupa la routine di servizio:
 + ritornare al programma interrotto (tramite IRET)
 
 Vediamo invece cosa succede se ci sono **più periferiche**. Si hanno i seguenti problemi:
-
 + come si fa a capire quale periferica ha generato l'interruzione?
 + scegliere la routine corrispondente
 + gestire le priorità
@@ -87,11 +72,9 @@ Vediamo invece cosa succede se ci sono **più periferiche**. Si hanno i seguenti
 
 **discriminazione da programma**: Ogni periferica modifica un bit della porta **ISR** se vuole generare un'interruzione. Leggendo la porta ISR (interrupt service routine) si può capire quale periferica ha generato l'interruzione. Il problema è che la CPU deve leggere la porta ISR per capire quale periferica ha generato l'interruzione, e questo richiede tempo. La priorità è gestita tramite la vicinanza dalla CPU: chi è più vicino ha maggiore priorità. La gestione dell'interrompibilità è gestita tramite un bit di mascheramento per ogni periferica. Se il bit è 1, la periferica non può generare interruzioni.
 Per superare l'inefficienza dovuta alla lettura della porta ISR possiamo vettorizzare le interruzioni: 
-
 + il dispositivo indica il numero di interrupt (**IRQ** i)
 + la CPU esegue direttamente la routine di servizio corrispondente all'interrupt, usando la tabella TABIR (contiene gli indirizzi delle routine di servizio). 
-+ L'IRQ i viene acquisito tramite un ciclo di bus e il segnale INTA indica che la CPU ha ricevuto l'interruzione e attende sul bus il numero di interruzione. 
-  
++ L'IRQ i viene acquisito tramite un ciclo di bus e il segnale INTA indica che la CPU ha ricevuto l'interruzione e attende sul bus il numero di interruzione.   
 La priorità delle interruzioni è stabilita da un **PIC** (programmable interrupt controller) che funge da arbitro di priorità, ed è lui che passa il corretto IRQ alla CPU (tramite bus dati). E' programmabile tramite delle porte di input output e un collegamento con il bus indirizzi. Usa due porte di input output: una per la programmazione; una per il mascheramento delle interruzioni, per gestire l'interrompibilità.
 All'interno del PIC troviamo l'**IRR** (interrupt request register), una parte di logica di controllo, un **MR** (mask register) e un ISR (in service register), che indica al PIC l'interruzione che in quel momento è in esecuzione; infine troviamo il **TR** (type register), formato da 8 bit, di cui 5 sono programmabili e tre si riferiscono all'interruzione che è stata generata (se il PIC gestisce 8 registri). Il **TR** è quello che viene messo un bus dati in risposta all'INTA. L'ISR ha il compito di disattivare le interruzioni a più bassa priorità. Nella routine di gestione si deve inviare un EOI (end of interrupt) al PIC - visto che il PIC è esterno alla CPU - prima di fare IRET, in modo da riattivare le interruzioni (riattivare ISR nel bit corrispondente all'interruzione appena avvenuta).   
 
@@ -102,7 +85,6 @@ All'interno del PIC troviamo l'**IRR** (interrupt request register), una parte d
 Una volta ricevuta la rischiesta di interruzione tramite INTR, la CPU asserisce INTA, che viene presentato a tutta la daisy chain, fintanto che non viene individuata la periferica più vicina che ha effettuato la richiesta di interruzione tramite IRQ. In caso di richieste concorrenti, la prima a essere accolta è quella della periferica più vicina alla CPU. L'inerfaccia della paeriferica che riceve l'IACK, presenta l'id corrispondente sul bus dati.
 
 #### Accesso diretto alla memoria (DMA)
-
 Ideale per i dispositivi che leggono e scrivono tanti dati per volta e molto velocemente (es. schede di rete, hard disk...), per i quali è impensabile traferire singoli byte usando le interruzioni.
 La gestione degli accessi alle varie periferiche non è più delegata alla CPU, ma a un componente esterno chiamato **DMAC** (Direct Memory Access Controller)
 
@@ -119,23 +101,19 @@ Vediamo le operazioni:
 Come è fatto un DMA? L'architettura prevede un contatore del numero di caratteri/parole da trasferire, un puntatore (registro indirizzo) alla posizione dove andrà scritto/letto il dato in memoria, un registro di comando con il tipo di trasferimento e un registro di stato.
 E' prevista una fase di programmazione del DMA, in cui si settano i registri del DMA.
 Il trasferimento più essere: 
-
 + singolo: il DMA trasferisce un singolo carattere
 + a blocchi: trasferisce tutte le parole indicate dal contatore e al termine del trasferimento viene generata un'interruzione.
-
++ 
 Facciamo una precisione sulle **interruzioni**. Possono essere:
 + asincrone: generate da periferiche esterne (viste finora);
 + sincrone (trap): generate da istruzioni, dovute a:
   + **errori** che avvengono nell'esecuzione di un'istruzione (es. divisione per 0) e sono dette eccezioni;
   + una **chiamata esplicita** con una istruzione specifica (es. INT 21H)
-  
 Le interruzioni sono molto importanti per i **Sistemi Operativi**, che sono per l'appunto **guidati** dalle interruzioni (interrupt driven).
 
 ## Introduzione ai Sistemi Operativi
-
 Un sistema operativo è un programma che agisce da intermediario tra l'utente e l'hardware. Il suo scopo è quello di fornire un'interfaccia semplice e unificata per l'utente, nascondendo i dettagli dell'hardware. Inoltre, il sistema operativo deve gestire le risorse hardware in modo da ottimizzare l'uso delle risorse e garantire l'equità nell'accesso alle risorse.
 Un sistema operativo deve rendere conveniente l'uso del calcolatore, che può essere diviso in 4 componenti:
-
   + **Hardware** che fornisce i componenti di base per l'elaborazione dei dati:
     + CPU
     + memoria
@@ -144,14 +122,12 @@ Un sistema operativo deve rendere conveniente l'uso del calcolatore, che può es
   + **sistema operativo** che controlla e coordina l'uso dell'hardware tra i vari programmi e utenti
   + **programmi applicativi** che definiscono le modalità di utilizzo del calcolatore da parte dell'utente (es. word processor, web browser, ecc.)
   + **utenti** che interagiscono con il calcolatore attraverso i programmi applicativi
-
 Non esiste una definizione univoca di sistema operativo, ma possiamo definirlo come un allocatore di risorse, dato che gestisce le risorse del calcolatore e decide tra richieste in conflitto per un uso efficiente e giusto di esse. Inoltre, è un programma di controllo, in quanto controlla l'esecuzione dei programmi per evitare errori e usi impropri delle risorse. <br>
 *Il programma che è sempre in esecuzione sul calcolatore* è il **kernel del SO**. Il kernel è il primo programma che viene eseguito quando si accende il calcolatore, e rimane in esecuzione fino allo spegnimento. Si occupa di tradurre i comandi immessi dagli utenti in modo da renderli leggibile dal computer... è un ponte tra software applicativo e hardware del sistema. Tutto ciò che non è il kernel è o un programma di sistema o un programma applicativo.
 
 All'avvio (o al reboot) del calcolatore viene eseguito il programma di **bootstrap**, che è tipicamente memorizzato su una ROM (o EEPROM) noto come **firmware** e si occupa di inizializzare e controllare tutti gli aspetti del sistema e di caricare (e avviare) il kernel sulla RAM. In caso di fallimento, il sistema non è utilizzabile e bisogna intervenire manualmente.
 
 ### Organizzazione di un calcolatore
-
 Nel calcolatore sono presenti:
 + una o più CPU e **controllori di dispositivi** di I/O connessi tramite bus che fornisce accesso a una memoria condivisa
 + esecuzione concorrente delle CPU e dei dispositivi che competono per l'uso della memoria
@@ -161,18 +137,14 @@ Nel calcolatore sono presenti:
 Ogni controllore di dispositivo si occupa di un tipo di dispositivo (es. stampante, disco, ecc.) e ha un buffer di memoria dedicato. La CPU sposta i dati dalla memoria al buffre e viceversa, mentre la periferica comunica col buffer del controllore. Il controllore di dispositivi informa la CPU che ha finito la sua operazione causando una interruzione.
 
 ### Gestione delle interruzioni
-
 Il sistema operativo preserva lo stato della CPU memorizzando il contenuto dei registri e del PC. Deve anche determinare che interruzione è avvenuta:
-
 + **polling**: il SO interroga ciclicamente tutti i dispositivi per vedere se hanno generato un'interruzione. Il polling è inefficiente, in quanto la CPU spreca tempo a controllare i dispositivi che non hanno generato interruzioni.
 + **vectored interrupt system**: già visto.
 
 le varie interruzioni hanno routine di servizio diverse. Non possono essere gestite tutte nello stesso modo!
 
 ### Architettura degli elaboratori
-
 Due distinzioni:
-
 + sistemi **monoprocesosre**: un solo processore per l'esecuzione dei programmi utente. Possono avere altri processori dedicati, ma indipendenti dal SO (es. controller del disco)
 + sistemi **multiprocessore**: più unità di elaborazione strettamente connesse che condividono le risorse (bus, clock, memoria e periferiche). Questa architettura è più veloce, affidabile (il guasto di un processore non blocca il sistema) e più economico in proporzione al lavoro svolto, visto che le periferiche sono condivise. Tuttavia, è più difficile da progettare e richiede un SO più complesso.
 
@@ -193,14 +165,12 @@ I sistemi di memorizzazione sono organizzati in una gerarchia, secondo tre aspet
 + volatilità
   
 #### Caching
-
 Il **caching** è una tecnica usata a tutti i livelli della gerarchia e consiste nel copiare temporaneamente l'informazione in uso da un un dispositivo di memorizzazione lento a uno più veloce. <br>
 L'informazione viene prima cercata nella memoria veloce: se è presente, viene usata; altrimenti, viene cercata nella memoria lenta e copiata nella memoria veloce. Per la gestione della cache si usano algoritmi di rimpiazzamento, che decidono quale informazione rimuovere dalla memoria veloce per fare spazio a quella nuova.
 
 In ambienti **multitasking** dobbiamo stare attenti a usare il valore più recente della variabile, in quanto potrebbe essere stato modificato da un altro processo. Per questo motivo, la cache deve essere **coerente**. In caso di sistemi **multiprocessore**, la cache delle varie CPU devono avere gli stessi valori. <br>
 
 ### Struttura del SO
-
 Una cosa necessaria nella struttura di un sistema operativo è la **multiprogrammazione** che aumenta l'efficienza. Gestisce lavori (jobs; codice e dati) diversi, in modo che la CPU abbia sempre qualcosa da fare. Un sottoinsieme di questi lavori presenti sul sistema è tenuto in memoria e un lavoro è selezionato da questo sottoinsieme attraverso il **job scheduling**: quando un lavoro deve aspettare un evento, il sistema operativo ne commuta un altro.
 
 **Timesharing (multitasking)**: la CPU cambia job così frequentemente che l'utente può ineragire con il job mentre è in esecuzione, dando vita all'**interactive computing**. Questo è possibile se il tempo di risposta è inferiore a un secondo.
@@ -221,7 +191,6 @@ la modalità è indicata da un bit di stato fornito dall'hardware e permette qui
 Questo risolve il problema per alcune istruzioni sbagliati, però non riesce a risolvere il problema del loop infinito, perché il sistema operativo rimane in attesa. Per questo motivo introduciamo i **timer**: Il SO usa i timer per prevenire i loop infiniti e i processi che si impossessano delle risorse del calcolatore senza rilasciarle. Il timer è un dispositivo hardware che genera una interrupt a intervalli predefiniti; il SO decrementa un contatore e, al raggiungimento dello zero genera un'interrupt, che riporta il sistema in modalità kernel. Il contatore viene impostato dal sistema operativo prima di schedulare un proesso.
 
 ### Gestione dei processi 
-
 Un processo è un programma in esecuzione. E' un unità di lavoro (composta da più job) nel sistema di calcolo. Un programma è un'entità passiva, mentre il processo è attivo: ha bisogno di risorse per svolgere il suo lavoro. La terminazione di un processo implica che il sistema operativo si riappropri delle risorse che sono state usate. <br>
 I processi possono essere: 
 
@@ -238,7 +207,6 @@ Il sistema operativo è responsabile di:
 + fornire meccanismi di gestione dello stallo (*deadlock*)
 
 ### Gestione della memoria
-
 Il sistema operativo deve gestire tutti i dati in memoria prima e dopo l'esecuzione di un processo. Tutte le istruzioni devono essere in memoria per poter essere eseguite. Il SO deve:
 
 + tenere traccia delle parti di memoria in uso e di quelle libere
@@ -257,7 +225,6 @@ Linux vede tutto come un file.
 Le memorie di massa (dischi) sono usati per memorizzre dati che non entrano in memoria primaria o dati che devono essere memorizzati per lungo tempo. La gestione di questi dispositivi è importantissima, perché sono molto più lenti della memoria primaria e quindi è necessario ottimizzare l'accesso ai dati. Il SO si occupa di gestire lo spazio libero, allocare in memoria file e directories e di gestire lo scheduling del disco, ovvero di decidere come le letture si succedono in modo da ridurre al massimo i tempi di attesa.
 
 ### Sottosistema di I/O
-
 Il sistema operativo deve nascondere le peculiarità dei dispositivi hardware all'utente. Una parte del sistema operativo, detta sottosistema di I/O si occupa di gestire la memoria per I/O:
 
 + buffering (memorizzare i dati temporaneamente mentre vengono trasferiti)
@@ -267,7 +234,6 @@ Il sistema operativo deve nascondere le peculiarità dei dispositivi hardware al
 mette a disposizione un'interfaccia di uso generale tra device e driver
 
 ### Protezione e sicurezza
-
 Il sistema operativo deve garantire:
 + **Protezione**: ogni meccanismo per controllare l'accesso dei processi/utenti a risorse definite dal sistema operativo
 + **sicurezza**: difera del sistema contro attacchi interni ed esterni
@@ -275,10 +241,9 @@ Il sistema operativo deve garantire:
 I sistemi distinguono gli utenti per determinare chi può fare cosa. Gli utenti sono identificati (user ID) da un nome e un numero associato. Lo user ID è associato a tutt i file e le directory a cui un utente può accedere e a tutti i processi che l'utente può eseguire. Il group ID permette di identificare un gruppo di utenti e può essere usato per controllare l'accesso risorse a livello di gruppo (compito più facile per il sistemista).
 
 ### Ambienti di elaborazione
-
 Esistono vari tipi di configurazione per un ambiente di elaborazione:
 + Personal Computer 
-+ Client-Server: il server risponde alle richieste dei client e può fornire un'interfaccia per richiedere servizi, come database (**compute-server**) o un'interfaccia per memorizzare e accedere ai file (**file-server**)<br><br>
++ Client-Server: il server risponde alle richieste dei client e può fornire un'interfaccia per richiedere servizi, come database (**compute-server**) o un'interfaccia per memorizzare e accedere ai file (**file-server**)<br>
 ![client-server](images/client-server.png)<br><br>
 +  peer-to-peer (P2P): non vi è distinzione tra client e server e ogni host può fornire servizi o richiederli. I nodi sono detti peers e fanno richieste in broadcast (su tutta la rete) per un servizio e risponde chi è in grado di fornirlo (**discovery** protocol)
 
@@ -287,7 +252,6 @@ Esistono vari tipi di configurazione per un ambiente di elaborazione:
 ![servizi](images/servizi.png)
 
 ### Servizi
-
 Il sistema operativo ha il compito di rendere utilizzabile un calcolatore e, per farlo, mette a disposizione dei servizi per l'utente:
 
 + **interfaccia utente**: Quasi tutti i sistemi ne sono dotati. Ne esistono di due tipi:
@@ -308,15 +272,12 @@ Per un uso efficiente e sicuro del sistema stesso, le risorse vengono condivise 
 ### Interfacce utene del SO
 
 #### CLI
-
 Permette l'inserimento diretto dei comandi. alcune volte è implementato nel kernel, altre volte nei programmi di sistema. Una CLI è basata su una shell, una collezione di comandi eseguibili da quella interfaccia. Un sistema può implementare anche più shells. Alcune volte i comandi sono built-in nell'interprete dei comandi, altre volte sono solo nomi dei programmi. Nel secondo caso, aggiungere nuovi comandi non richiedere di modificare la shell.
 
 #### GUI
-
 Interfaccia user-firendly che rappresenta file, programmi, azioni ecc. con delle icone e permette di interagire con il sistema operativo tramite mouse e tastiera. Un sistema può includere sia GUI che CLI.
 
 ### Chiamate di sistema
-
 Le chiamate di sistema rappresentano un'interfaccia di programmazione verso i servizi offerti dal SO. Sono tipicamente scritte in C/C++ e vengono usate dai programmi attraverso delle **API** (Application Program Interface), che forniscono un'astrazione di alto livello verso le funzionalità offerte dal sistema operativo. Tra le API più famose troviamo Win32 API per Windows e Java API per la Java Virtual Machine (JVM) che sono a un livello di astrazione maggiore. 
 
 + Sequenza di chiamate di sistema per copiare il contenuto di un file su un altro file <br><br> 
@@ -335,7 +296,6 @@ Il chiamante non ha interesse a sapere come viene effettuata la chiamata di sist
 ![implementazione-CS](images/implementazione-CS.png)
 
 #### Linux System Call
-
 Le chaimate di sistema di Linux vengono fatte attraverso l'istruzione INT 80h (vuol dire che all'indirizzo 80h avrò la chiamata alla procedura che gestisce le chiamate di sistema)(interrupt sincrona chiamata esplicitamente) e il registro EAX del processore contiene il numero della chiamata di sistema da eseguire. INT 80h passa dalla modalità utente a quella kernel: <br>
 + Il kernel della procedura associata all'interruzioe 80h (ISR) può controllare se la chiamata è valida e usando una tabella interna al kernel può chiamare la funzione associata alla chiamata di sistema indicata nel registro EAX.
 ```assembly
@@ -347,7 +307,6 @@ INT 80h           ;esegue syscall
 ```
 
 ### Passaggio dei parametri alla chiamata di sistema
-
 Esistono tre metodi per passare i parametri alla chiamata di sistema. Il più semplice, quello riportato sopra, usa i registri della CPU e, come abbiamo visto, è quello che usa linux. Questo metodo però limita il numero di parametri che possiamo passare al numero di registri disponibili. Un altro metodo prevede di memorizzare i parametri in un blocco o tabella di memoria e l'indirizzo del blocco viene passato come parametro in un registro della CPU (usato da Solaris). 
 
 ![parametri-con-tabella](images/parametri-con-tabella.png)
@@ -356,14 +315,12 @@ Infine possiamo passare i parametri usando lo stack. <br>
 Gli ultimi due metodi non limitano il numero e la lunghezza dei parametri passati.
 
 ### Tipi di chiamate di sistema
-
 + **Controllo dei processi**
 + **Gestione dei File**
 + **Gestione dei dispositivi**
 + **Comunicazioni**
 
 ### Programmi di sistema
-
 I programmi di sistema sono forniti insieme al sistema operativo e mettono a disposizione un ambiente per lo sviluppo fi programmi e per la loro esecuzione, Possono essere divisi in programmi per: 
 
 + la manipolazione di file;
@@ -381,13 +338,11 @@ I programmi di sistema sono forniti insieme al sistema operativo e mettono a dis
 Alcuni sono semplicemente delle interfacce per le chiamate di sistema; altri sono considerevolmente più complessi.
 
 ### Progettazione e implementazione di Sistemi Operativi
-
 Progettare e implementare un sistema operativo è complicato. La struttura interna può variare moltissimo tra un sistema operativo e l'altro. La prima cosa da fare è definire gli obiettivi (goals) e le caratteristiche del sistema. Dobbiamo ricordare che un sistema operativo è strettamente legato all'hardware su cui dovrà girare
 
 Un principio importante è quello di separare i criteri o politiche, che decidono cosa sarà fatto, dai meccanismi, che invece determinano come qualcosa verrà implementato.
 
 #### Struttura monolitica (macrokernel)
-
 Approccio più semplice. Il kernel è un unico file binario, un singolo programma, con un unico spazio di indirizzamento e nella fase di boot viene caricato e messo in esecuzione. Questo sistema comporta varie problematiche, tra cui il fatto che i device driver sono integrati nel kernel ed è quindi difficile supportare nuovi device...è necessario un riavvio ogni volta che un nuovo dispositivo viene aggiunto. Unix e linux usavano questa struttura
 
 ##### Struttura unix 
