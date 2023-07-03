@@ -350,12 +350,10 @@ Approccio più semplice. Il kernel è un unico file binario, un singolo programm
 ![struttura-unix](images/struttura-unix.png)
 
 #### Approccio stratificato
-
 Il sistema operativo viene diviso in un numero N di strati (layer), ognuno costruito sulla base degli strati inferiori. Lo strato più basso identifica l'hardware, mentre la user interface identifica lo strato più alto. Ogni strato usa funzioni e servizi dei soli strati inferiori. <br>
 Questo tipo di struttura è facile da verificare e testare, ma difficile da progettare, in quanto non è banale definire gli strati. Inoltre si introduce un'inefficienza dovuta all'attraversamento dei vari strati in una chiamata.
 
 #### Struttura a microkernel
-
 Il kernel si occupa solo di: gestire i processi, gestire la memoria e gestire la comunicazione tra processi. Tutto il resto viene delegato alla user-mode.
 
 ![struttura-microkernel](images/struttura-microkernel.png)
@@ -378,7 +376,6 @@ La maggior comunicazione tra spazio utente e kernel, comporta però una diminuzi
 Questa struttra ha aspetti microkernel, però è detto a kernel ibrido.
 
 #### Moduli
-
 La maggior parte dei sistemi operativi moderni implementano una struttura modulare, con i così detti moduli kernel. E' un struttura che usa un approccio object-oriented in cui ogni componente base è separato. Ogni modulo comunica con gli altri moduli attraverso interfacce ben definite e viene caricato in base alle necessità del kernel. Quest'ultima caratteristica lo rende molto più flessibile della struttura stratificata
 
 ##### Struttura modulare di Solaris
@@ -386,7 +383,6 @@ La maggior parte dei sistemi operativi moderni implementano una struttura modula
 ![struttura-solaris](images/struttura-solaris.png)
 
 ### Macchine Virtuali (VM)
-
 Una macchina virtuale ha l'obiettivo di simulare una macchina fisica. **Fornisce una interfaccia identica all'hardware sottostante**. <br>
 Il sistema operativo crea l'illusione di disporre di più macchina, ognuna in esecuzione sul suo processo e con al propria memoria (virtuale).<br>
 Lo scheduling della CPU crea l'illusione de ogni VM abbia il proprio processore dedicato. Il file-system può fornire uno spazio di memorizzazione per ogni macchina virtuale. <br>
@@ -424,7 +420,6 @@ Può eseguire applicazioni java su host system diversi, perché vengono compilat
 
 
 ## I processi
-
 Un **processo** è un programma in esecuzione. E' un'entità attiva che ha bisogno di risorse per svolgere il suo lavoro. L'esecuzione del programma deve procedere in modo sequenziale e sfruttano le chiamate di sistema per interagire con il sistema operativo. <br>
 
 Un processo include:
@@ -491,7 +486,6 @@ Quando la CPU viene assegnata ad un altro processo, il sistema deve salvare lo s
 Il tempo impiegato per il context switch è determinato dal supporto hardware.
 
 ### Creazione e terminazione dei processi
-
 Come visto nello scheduling di un processo, un processo (parent) può generare un processo figlio (child), che a sua volta crea altri processi, formando un albero di processi. Il sistema operativo crea un processo iniziale (init) che crea tutti gli altri processi. <br> 
 Un processo figlio può condividere alcune risorse con il processo padre, come la memoria, i file, i dispositivi di I/O ecc. Si hanno 3 possibilità:
 
@@ -530,7 +524,6 @@ I processi si possono comporre connettendo lo stream di output di uno sullo stre
 L'esecuzione dei processi in *Java* avviene attraverso il metodo *exec* della classe **RunTime**. In jav l'esezuzione diretta di nuovi processi limita la portabilità dell'applicazione; (es. potrei eseguire un processo di windows che non è presente su linux) è sempre meglio usare i **THREAD**, perché vengono eseguiti nella **JVM**, che è indipendente dal sistema operativo.
 
 ### Processi cooperativi e indipententi
-
 Un processo è detto **indipendente** se non viene influenzato e non influenza l'esecuzione di altri processi. Un processo è detto **cooperativo** se può influenzare o essere influenzato dall'esecuzione di altri processi; i processo cooperano per un certo obiettivo. <br>
 I processi cooperativi presentano dei vantaggi:
 
@@ -541,7 +534,6 @@ I processi cooperativi presentano dei vantaggi:
 + posso creare un sistema distribuito.
 
 ### InterProcess Communication (IPC)
-
 Come già detto, i processi cooperativi hanno bisogno di comunicare tra loro. IPC è un meccanismo usati dai processi per lo scambio di dati, attraverso sue modelli princali:
 
 + (a) **memoria condivisa**: viene creata una zona di memoria condivisa tra più processi, che possono leggere e scrivere in essa. Questo metodo è molto veloce, ed è usata per scambiare grandi quantità di dati. Il problema di questo metodo è che un processo non sa quanto un altro ha scritto o letto sulla memoria condivisa, rendendo complicata la sincronizzazione. Esistono dei metodi per risolvere il problema: come il polling (poco efficiente)
@@ -561,11 +553,9 @@ Il canale di comunicazione può essere:
 + livello logico (es. proprietà logiche)
 
 #### Comunicazione diretta
-
 I processi devono nominarsi esplicitamente all'interno delle funzioni (send(P, message), receive(Q, message)). In questo tipo di comunicazione, il canale è stabilito automaticamente tra due processi comunicanti con un collegamento; tra due coppie di processi può esiste un solo collegamento e può essere unidirezionale o bidirezionale. Questo metodo è un po' scomodo nel caso in cui un processo debba comunicare con più di un processo, perché deve creare un collegamento per ogni processo con cui vuole comunicare. 
 
 #### Comunicazione indiretta
-
 Questo metodo è molto più usato e permette di astrarre la comunicazione rta processi: I messaggi inviati da un processo sono diretti e vengono ricevuti da una porta (o mailbox), identificata con un numero univoco. I processi possono comunicare solo ce condividono una porta. <br>
 Il collegamento viene stabilito solo se i processi condividono una porta; può essere associato a pià processi e una coppia può condividre più collegamenti. 
 
@@ -584,7 +574,6 @@ Ora mettiamo caso che tre processi: P1, P2, P3 condividano la porta A. P1 invia 
 + Permettere che il sistema operativo scelga in modo arbitrario quale processo riceve il messaggio, al processo inviante viene notificato quale processo ha ricevuto il messaggio
 
 #### Sincronizzazione 
-
 L’invio/ricezione di messaggi può essere bloccante o
 non bloccante
 + **Bloccante** è considerato **sincrono**
@@ -599,14 +588,12 @@ messaggio e continua
 messaggio valido o un messaggio nullo
 
 #### Code di messaggi
-
 Il sistema operativo ha il compito di gestire le code di messaggi. Ne esistono di due tipi:
 
 + **capacità zero**: Il processo inviante deve aspettare il processo ricevente...si devono incontrare
 + **capacità limitata**: La coda ha capacità limitata n e il processo inviante aspetta solo se la coda è piena 
 
 ## Threads
-
 Il sistema operativo è in grado di eseguire processi single e multi-thread. I processi multi-thread, condividono il codice i dati (variabili globali) e i file, mentre hanno uno stack e dedicato e ognuno ha i propri registri. <br>
 
 ![multi-thread](images/multi-thread.png)
@@ -638,12 +625,10 @@ Un thred può venir terminato preventivamente con due approcci gnerali: Un appro
 I thread condividono la memoria *globale*, ma hanno anche uno stack proprio per le variabili locali. Può essere utlie avere delle variabili globali, che siano visibili non da tutti i thread, ma solo da alcuni. Per questo esiste la **thread-local storage (TLS)**, che permette di avere delle variabili globali, visibili solo da alcuni thread. <br>
 
 ### Thread in Linux
-
 In linux, i thread sono chiamati task e vengono creati tramite la chiamata di sistema **clone()** che è simile a fork(), ma permette di specificare quali risorse condividere tra i thread. Anche la fork() stessa è implementata tramite clone(). <br>
 Per gestire i thread su linux, viene usata la libreria **Pthread** (POSIX threads): una API standard e portabile per la gestione dei thread, che permette di creare, terminare, sincronizzare e comunicare tra thread. <br>
 
 ### Thread in Java
-
 I thread in Java vengono gestiti dalla JVM, ma sono eseguiti dal sistema operativo. Ci sono due modi per creare un thread in Java:
 
 + estendendo la classe **Thread**: si crea una classe che estende la classe Thread e si implementa il metodo run(), che contiene il codice da eseguire. Si crea un oggetto della classe creata e si invoca il metodo start() per eseguire il thread.  Il metodo join() permette di aspettare che il thread termini l'esecuzione, genera un'eccezione InterruptedException se il thread viene interrotto tramite interrupt().
@@ -673,7 +658,6 @@ Un Thread può trovarsi in uno sei seguenti stati:
 
 
 ## Scheduling della CPU
-
 Lo scheduling della CPU permette di utilizzare la massimo le risorse della CPU, attraverso la multiprogrammazione: sfruttiamo le fasi in cui un processo è in attesa per assegnare nuovi processi alla CPU. <br>
 L'esecuzione dei processi consiste di un ciclo di esecuzione in CPU e attesa di una periferica. La fase il cui il processo lavora con il processore è detta CPU burst. Le applicazioni possono essere CPU bound (tanti processi che durano poco), oppure I/O bound (pochi processi che durano tanto).
 
@@ -689,7 +673,6 @@ La prelazione può portare a problemi di inconsistenza dei dati condivisi tra du
 Quando un processo è sottoposto a prelazione, può capitare che venga interrotto durante una chiamata di sistema, avendo quindi in esecuzione il codice del kernel: per ovviare a possibili gravi problemi, alcuni sistemi operativi impediscono che un processo venga interrotto se sta eseguendo una chiamata di sistema
 
 ### Dispatcher 
-
 Il modulo Dispatcher del sistema operativo dà il controllo della CPU al processo selezionato dallo scheduler. Il dispatcher deve essere il più veloce possibile, in modo da minimizzare il tempo di risposta (latenza di dispatch). <br>
 Il dispatcher deve fare le seguenti operazioni:
 
@@ -698,7 +681,6 @@ Il dispatcher deve fare le seguenti operazioni:
 + saltare all'indirizzo di partenza del processo selezionato oppure all'indirizzo dell'istruzione cui il processo era rimasto 
 
 ### Criteri di scheduling
-
 Come già detto, l'obiettivo dello scheduling è utilizzare al massimo la CPU, tenendola il più occupata possibile. 
 
 Definiamo la **produttività** in termini di numero di processi completati per unità di tempo (throughput), che puntiamo a massimizzare. <br>
@@ -706,7 +688,6 @@ Vogliamo invece minimizzare il **tempo di completamento** (o tempo di ritorno), 
 Lo scheduler della CPU incide soprattutto sul tempo di attesa. 
 
 ### First Come, First Served (FCFS)
-
 Questo scheduling non prevede la prelazione. Supponiamo di avere in coda i seguenti processi: 
 
 ![processi-fcfs](images/processi-fcfs.png)
@@ -732,7 +713,6 @@ Supponiamo invece che l'ordine di arrivo sia: *P2, P3, P1*
 Possiamo notare che l'aver mandato in esecuzione i processi corti prima del processo lungo, ha portato a un miglioramento del tempo medio di attesa. Questo è vero in generale: chiamiamo **effetto convoglio** l'aumento del tempo di attesa dovuto all'esecuzione dei processi lunghi prima dei processi corti.
 
 ### Shortest Job First (SJF)
-
 Associa a ogni processo la **lunghezza del prossimo CPU burst**. Queste lunghezze vengono usate per schedulare il processo con il minor tempo. Esistono due schemi: lo schema **non-preemptive**, ovvero che un processo non può essere schedulato prima che il corrente processo assegnato alla CPU abbia terminato il CPU burst; lo schema **preemptive**, cioè che se arriva un processo la cui lunghezza del CPU burst è inferiore al tempo rimanente al processo attualmente in esecuzione, allora questo nuovo processo viene assegnato alla CPU (Shortes Remaining Time First). L'SJF è detto **ottimale**, in quanto garantisce il minimo tempo medio di attesa per un insieme di processi fissati
   
 ![SJF-nonpreemptive](images/SJF-nonpreemptive.png)
@@ -754,14 +734,12 @@ Noi non possimao determinare la lunghezza del prossimo CPU burst; possiamo solo 
 + $\tau$<sub>n+1</sub>  $= \alpha t$<sub>n</sub> $+(1+\alpha)\tau$<sub>n</sub>
 
 ### Scheduling con Priorità
-
 A ogni processo viene associato un numero intero, che avrà il ruolo di priorità del processo stesso. La CPU è allocata dal processo con la priorità più alta (intero più basso) e lo scheduling in questo caso, può essere sia preemptive che non. <br> 
 L'SJF è uno scheduling a priorità, dove la priorità è il tempo predetto del prossimo burst della CPU. 
 Il problema che sussiste con questi tipi di scheduling è il così detto **starvation**: processi con priorità molto bassa non vengono mai eseguiti.
 La soluzione consiste nell'incrementare la priorità al passare del tempo: **Aging** 
 
 ### Round Robin (RR)
-
 In questo scheduling, ogni processo è allocato in CPU per una piccola parte di unità di tempo (time quantum, nell'ordine di 10-100 millisecondi). Dopo che questo *quanto* è trascorso, il processo viene interrotto e aggiunto alla fine della coda di ready. <br>
 Se ci sono *n* processi nella coda di ready e il quanto è *q*, allora ogni processo prende *1/n* del tempo della CPU (spartito equamente tra i processi) in parti di al massimo *q* unità di tempo alla volta. Nessun processo aspetta più di *(n-1)/q* unità di tempo. <br>
 Se *q* è grande, allora questo scheduling si comporta come lo scheduling FCFS; d'altra parte, se *q* è piccolo, il tempo di context switch aumenta.<br>
@@ -779,7 +757,6 @@ Nell'esempio di sopra vengono eseguiti 9 context switch.
 All'aumentare del quanto, diminuisce la media del tempo di completamento.
 
 ### Code multilivello
-
 Un'altro modo in cui viene gestito lo scheduling: **La coda dei processi pronti è divisa in ulteriori code separate**, per esempio:
 
 + foreground (interattivi);
@@ -811,14 +788,12 @@ Vediamo il seguente esempio:
   ![multi_livello_esempio](images/muli_livello_esempio.png)
 
 ### Paramertri della CPU
-
 I parametri che ci interessano sono:
 
 + Percentuale CPU usata: viene stabilito un intervallo temporale e viene calcolata la percentuale di questo tempo la CPU (o le CPU) è usata. E' facile dividere la percentuale tra i processi, per capire chi è che sta stressando maggiormente la CPU;
 + Carico medio CPU: Il carico medio della CPU è usato in ambienti UNIX per indicare il carico del sistema e quindi la sua capacità di eseguire i processi in modo regolare senza eccessivi ritardi
 
 ### Scheduling di Linux
-
 Linux è un kernel open source, che permette di create sistemi molto eterogenei. Gli obiettivi di linux sono:
 
 + Timesharing
@@ -833,7 +808,6 @@ prevede uno scheduling con prelazione sul codice utente; il codice kernel suppor
 All'inizio, il kernel integrava uno scheduler basato su epoche, ovvero un processo poteva essere eseguito per un certo periodo di tempo, dopodichè veniva messo in coda e veniva eseguito un altro processo. Questo sistema era molto semplice, ma non permetteva di gestire i processi in modo dinamico. Il tempo per scegliere un processo da mandare in esecuzione dipendeva dal numero di processi in coda($O(n)$). Nel 2013, e stato introdotto uno scheduler Earlied Deadline First (EDF) per task periodci 
   
 ### Scheduling linux/POSIX
-
 Linux segue la specifica **POSIX** riguardo allo scheduling, che si basa su una priorità statica e una dinamica (che viene calcolata in base alla priorità statica). La priorità statica è un numero intero tra 1 e 99, dove 99 è la priorità più alta, ed è usata per lo scheduling dei tast (soft) real-time. I task a priorità statica essere schedulati in due modi: 
 
 + **Scheduling FIFO**: quanto di tempo illimitato. Un processo lascia la CPU solo se si blocca in attesa di una risorsa I/O, se termina o se arriva un processo con più alta priorità 
@@ -843,12 +817,10 @@ Se un processo della coda FIFO entra in loop infinito sulla (unica) CPU, il sist
 Per i task normali viene usata la priorità statica 0 e sono schedulati secondo la politca OTHER/NORMAL, nella quale i task hanno priorità dinamica   
 
 ### Scheduling kernel 2.4, basato su epoche
-
 I task a priorità statica 0 vengono schedulati con una politica basata su epoche: A ogni processo è assegnato un quanto di tempo, consumato durante l'epoca; la priorità dinamica è legata alla lunghezza del quanto. Quando tutti i task della coda di ready hanno terminato il proprio quanto, l'epoca è finita è vengono ricalcolati i quanti di tempo per l'epoca successiva, aumentando (della metà di quanto rimasto precedentemente) se il processo non ha terminato il proprio quanto, favorendo in questo modo i proessi interattivi o con I/O bound. Il task può variare il proprio quanto (e quindi la propria priorità), attraverso il valore **nice** [-20,19] dove i valori negativi aumentano la priorità. Per decidere il task da mandare in esecuzione viene fatta una scansione di tutti i processi nella coda di ready; questo rende molto lento lo scheduling ($O(n)$). <br>
 Tutte le CPU accedono a un'unica coda di ready, quindi non possono accedervi contemporaneamente. 
 
 ### Scheduler O(1)
-
 Questo sistema riduce il tempo di scelta del task da mandare in esecuzione (su N task) a un tempo costante, usando una tabella di hashing. <br>
 Sono previsti 140 livelli di priorità, in cui il livello 0 è quello più alto e sono organizzati in questo modo:
 
@@ -875,7 +847,6 @@ In questo caso Ogni CPU ha la sua coda dei processi, i quali vengono spostati pe
 C'è da dire che gestire tutte le euristiche dei bonus è complicato. Per questo motivo è stato introdotto il CFS (Completely Fair Scheduler).
 
 ### Completely Fair Scheduler (CFS)
-
 A ogni task (non real time) è associato un **virtual_runtime**, che identifica il tempo di uso della CPU. Per decidere quale task nella coda di ready allocare, viene selezionato il task con il minor virtual_runtime. <br>
 I task sono organizzati in un albero rosso-nero, in cui ogni nodo rappresenta un task, identificato dal proprio virtual_runtime: 
 
@@ -900,11 +871,9 @@ Il quanto viene calcolato sulla base di tutti gli weight dei task nella coda di 
 All’aumentare della priorità (nice level basso) avrà un timeslice più grande rispetto agli altri task.
 
 ### Classi di Scheduling
-
 Con il kernel 2.6.23 è stato riorganizzato il codice per lo scheduling ed è definita un'interfaccia per algoritmi di scheduling. QUesto permette di definire nel kernel più **classi di scheuing**, ognuna gesita con il proprio algoritmo.
 
 ## Sincronizzazione tra processi
-
 L'accesso concorrente a dati condivisi può portare ad avere dei dati inconsistenti, dovuto a:
 
 + Scheduling con prelazione in monoprocessore
@@ -964,7 +933,6 @@ Vediamo le proprietà delle sezioni critiche:
   + Nessuna assunzione sulla velocità relativa degli N processi 
 
 ### Soluzione di Peterson
-
 La soluzione di Peterson è una soluzione software utlizzabile solo per due processi. <br>
 Si assume che le operazioni di LOAD e STORE siano atomiche.
 I due processi condividono due variabili:
@@ -1001,7 +969,6 @@ Il progresso è garantito, perché se uno dei due processi vuole entrare nella s
 Dopo che P<sub>0</sub> è entrato e P<sub>1</sub> è in attesa, se P<sub>0</sub> richiede nuovamente di entrare allora viene prima sbloccato P<sub>1</sub> e poi verrà gestito P<sub>0</sub>... quindi anche l'attesa limitata è garantita.
 
 ### Algoritmo del Fornaio (Lamport)
-
 Questa è una soluzione più generale, per N processi. L'idea è gestire i thread come se fossero dei clienti in fila, in attesa: Un thread prende un numero e poi aspetta che il suo numero sia il prossimo da servire, ovvero il più piccolo. <br>
 Sono usati due vettori di N elementi condivisi tra gli N processi:
 + int **number[N]**: contiene i numeri "presi" dai processi per entrare nella sezione critica (0 se il processo non vuole ci vuole entrare)
@@ -1039,7 +1006,6 @@ Per i sistemi multiprocessore (sistemi più moderni), si usano le **istruzioni a
 + Scambiano il contenuto di due parole di memoria
 
 ### Istruzione di TestAndSet
-
 Istruzione che legge il valore di una variabile e la imposta. E' eseguita sul processore senza essere interrotta 
 
 ```C
@@ -1064,7 +1030,6 @@ do {
 La variabile **lock** è condivisa tra i processi e viene usata per indicare se un processo è nella sezione critica o meno. TestAndSet(&lock) legge il valore di lock e lo mette a true, ritornando il valore precedente. Se il valore precedente era false, allora il processo può entrare nella sezione critica. Solo un processo troverà lock a false. Il problema di questa istruzione è che non garantisce tutte le proprietà delle sezioni critiche: non garantisce l'attesa limitata, perché un processo potrebbe essere sempre interrotto da un altro processo che ha la priorità più alta e con una sezione critica molto piccola. <br>
 
 ### Istruzione di Swap
-
 Scambia il contenuto di due parole di memoria. E' eseguita sul processore senza essere interrotta 
 
 ```C
@@ -1119,7 +1084,6 @@ Le soluzioni viste finora sono dette ad **attesa attiva** (o **busy waiting**), 
 In alcuni casi è comunque conveniente usare le attese attive, per esempio quando la sezione critica è molto piccola e il tempo per il context switch è maggiore del tempo di attesa. Il sistema operativo quindi fornisce anche gil **spinlock**, che implementano l'attesa attiva.
 
 ### Semafori
-
 I semafori sono un modo per implementare i mutex. Sono strumenti di sincronizzazione tra processi, che permettono di risolvere il problema delle sezioni critiche. <br>
 Il semaforo S è una variabile intera, sulla quale sono possibili due operazioni:
 
@@ -1148,8 +1112,8 @@ wait(mutex);
 //sezione critica
 signal(mutex);
 ```
-#### Uso
 
+#### Uso
 I semafori contatore si possono usare er regolare l'accesso a un numero n di risorse che vengono usate singolarmente:
 + si inizializza S a n
 + si usa wait(S) prima di usare una risorsa, se le risorse sono terminate (S==0) il processo entra in attesa
@@ -1160,7 +1124,6 @@ I semafori possono anche essere usati per sincronizzare l'esecuzione tra process
 ![semafoti-sincronizazione](images/semafori-sincronizzazione.png)
 
 #### Implementazione
-
 L'implementazione dei semafori deve garantire che due processi non possano eseguire wait e signal contemporaneamente sullo stesso semaforo. <br>
 Notiamo che anche in questo caso la wait() implementa un'attesa attiva attraverso un ciclo while e questo comunque non va bene, perché le applicazioni possono passare molto tempo nelle sezioni critiche e quindi l'attesa attiva diventa inefficiente. 
 
@@ -1210,7 +1173,6 @@ Vediamo alcuni problemi dovuti all'implementazione dei semafori:
   Una possibile soluzione consiste nell'aumentare la priorità di L portandola allo stesso livello di H (solo durante l'attesa di H) in modo che altri processi non possano fare prelazione su processo L e possa velocemente terminare l'utilizzo della risorsa R. Questo metodo è detto **protocollo di ereditarietà delle priorità**.
 
 ### Problema Produttori e consumatori con memoria limitata
-
 Il problema dei produttori e consumatori è un problema classico di sincronizzazione tra processi: abbiamo più thread (i Produttori) che vogliono inserire i dati in un buffer (una coda) limitato e più thread (i Consumatori) che vogliono prelevare i dati dal buffer. <br>
 I produttori dovranno aspettare nel caso in cui il buffer sia pieno. Viceversa, i Consumatori aseetteranno nel caso in cui il buffer sia vuoto
 
@@ -1258,7 +1220,6 @@ Il Produttore aspetta che si liberi almeno una posizione nel buffer per poter ca
 Un consumatore in attesa che il semaforo full sia >0 a questo punto verrà "svegliato" e potrà accedere al buffer. Il consumatore asserisce mutex e decrementa il numero di posizioni piene nel buffer; successivamente consuma il dato (fuori dalla sezione critica).
 
 ### Problema dei lettori e scrittori
-
 Un insieme di dati è condiviso tra processi concorrenti: i Lettori, che leggono i dati e non effetuano modifiche; gli Scrittori, che leggono e scrivono i dati. <br>
 Il problema permette a più lettori di leggere contemporaneamente i dati, ma permette a un solo scrittore di modificarli. <br>
 L'insieme di dati condivisi è composto da:
@@ -1302,7 +1263,6 @@ Se non mettessi l'accesso esclusivo alla prima parte di codice, allora avrei una
 Il problema di questa soluzione è che potrei avere delle **attese indefinite degli scrittori**
 
 ### Problema dei 5 filosofi
-
 Il problema dei 5 filosofi è un problema classico di sincronizzazione tra processi: abbiamo 5 filosofi che devono mangiare, ma possono mangiare solo se hanno entrambe le bacchette (come fai a mangiare il riso con solo una bacchetta?!). <br>
 
 ![5-filosofi](images/5-filosofi.png)
@@ -1329,7 +1289,6 @@ do {
 ***Problema***: i processi entrano in **stallo** se tentano di prendere entrambe le bacchette (di mangiare) contemporaneamente.
 
 ### Problemi con i semafori
-
 I semafori sono un meccanismo di sincronizzazione molto potente, ma possono essere usati in modo errato. Ecco alcuni usi scorretti delle istruzioni wait e signal:
 
 + signal(mutex) ... wait(mutex): invertire l'ordine delle istruzioni porta ad avere più processi in sezione critica contemporaneamente
@@ -1343,7 +1302,6 @@ Un altro uso scorretto è il seguente:
 I problemi di sincronizzazione dovuti a un errato uso dei semafori sono molto difficili da individuare, in quanto si possono anche verificare solo in rare occasioni e difficilmente riproducibili. <br>
 
 ### Monitor
-
 I monitor sono una astrazione di alto livello che fornisce un meccanismo conveniente ed efficiente per la sincronizzazione tra processi: **solo un processo per volta può essere attivo all'interno di un monitor**; infatt il vantaggio nell'utilizzo dei monitor è che non è necessatio codificare manualmente un sistema che garantisca la mutua esclusione dei processi.
 
 ```C
@@ -1463,7 +1421,6 @@ Signal:
 Per ogni condizione x viene usato un semaforo x_sem e un contatore x_count inizializzato a 0
 
 ## Gestione dello Stallo
-
 Lo stallo è quello situazione in cui un insieme di processi sono bloccati, ognuno in possesso di una risorsa e in attesa di acquisire un'altra risorsa posseduta in quel momento da un altro processo. Abbiamo già visto l'esempio con i semafori: 
 
 + Duse semafori A e B, entrambi inizializzati a 1: 
@@ -1485,7 +1442,6 @@ Lo stallo può avvenire sotto determinate condizioni (condizioni necessarie, ma 
 Tutte queste condizioni devono verificarsi contemporaneamente.
 
 ### Grafo di allocazione delle risorse
-
 Definiamo una notazione per descrivere le varie situazioni in cui processi e risorse possono trovarsi: Usiamo i grafi, composti da nodi e da archi, per rappresentare le allocazioni delle risorse. <br>
 V = {P<sub>0</sub>, P<sub>1</sub>, ..., P<sub>n</sub>} è l'insieme dei processi e R = {R<sub>0</sub>, R<sub>1</sub>, ..., R<sub>m</sub>} è l'insieme delle risorse. <br>
 Un arco che va da un processo a una risorsa indica la richiesta di allocazione di una istanza. Un arco che va da una risorsa a un processo indica l'allocazione di una istanza. 
@@ -1507,7 +1463,6 @@ Per gestire lo stallo ci sono tre strategie:
 + Ignorare il problema e fingere che non esista (Linux e Windows usano questa strategia)
 
 ### Prevenzione dello stallo
-
 Per prevenire lo stallo andiamo a vincolare le modalità di richieste delle risorse da parte dei processi, in modo da escludere **almeno una** delle 4 condizioni necessarie allo stallo:
 
 + Mutua esclusione: non è necessare per le risorse condivise; è obbligatoria per le risorse non condivise
@@ -1516,7 +1471,6 @@ Per prevenire lo stallo andiamo a vincolare le modalità di richieste delle riso
 + Attesa circolare: viene imposto un ordinamento totale a tutti i tipi di risorsa e i processi possono richiedere le risorse solo in ordine crescente (si evita il ciclo)
 
 ### Evitare lo stallo
-
 Per evitare lo stallo è necessario che il sistema sia in possesso di informazioni aggiuntive sui processi. Il modello più semplice prevede che ogni processo debba dichiarare a priori il numero massimo di istanze di ogni tipo di risorsa che può richiedere. L'algoritmo per evitare lo stallo esamina dinamicamente lo stato di allocazione delle risorse per assicurare che non ci potrà mai essere una condizione di attesa circolare. Lo **stato di allocazione delle risorse** è definito dal numero di risorse disponibili e allocate e dalle richieste massime dei processi. 
 
 Ciò che vogliamo è che, quando un processo richiede una risorsa disponibile, il sistema decida se l'allocazione immediata al processo lascia il sistema in uno **stato sicuro**. Uno stato è sicuro se esiste una sequenza sicura di tutti i processi. Una **sequenza** {P<sub>1</sub>, ..., P<sub>n</sub>} è **sicura** se per ogni processo P<sub>i</sub>, le risorse che P<sub>i</sub> può ancora richiedere possono essere soddisfatte con le risorse attualmente disponibili più quelle possedute dai processi P<sub>j</sub> con j<i . <br>
@@ -1527,7 +1481,6 @@ Vediamo alcuni fatti: se il sistema è in uno stato sicuro, allora non c'è stal
 ![evitare-stallo](images/evitare-stallo.png)
 
 #### Algoritmo con grafo di allocazione delle risorse
-
 Si usa solo per risorse con una singola istanza. Al grafo viene aggiungo un unuovo tipo di arco: L'arco di rivendicazione, che indica che un processo in futuro potrebbe effettuare una richiesta su una determinata risorsa; si indica con una linea tratteggiata. <br>
 Un arco di rivendicazione può essere convertito in un arco di richiesta quando un processo richede la risorsa. Quando la risorsa viene rilasciata dal processo, l'arco di assegnazione verrò convertito in arco di rivendicazione. <br> 
 Una risorsa viene concessa se dopo la sostituzione dell'arco (rivendicazione -> assegnazione) non si crea un ciclo. <br>
@@ -1535,7 +1488,6 @@ Una risorsa viene concessa se dopo la sostituzione dell'arco (rivendicazione -> 
 ![algoritmo-singola-istanza](images/algoritmo-singola-istanza.png)
 
 #### Algoritmo del Banchiere
-
 Si applica a situazioni in cui le risorse hanno multiple istanze. Ogni processo deve dichiarare a priori il massimo uso per ogni tipo di risorse. Quando un processo prende tutte le risorse necessarie le deve rilasciare entro un tempo finito. <br>
 Vediamo le strutture che usa questo algoritmo:
 
@@ -1567,7 +1519,6 @@ Supponiamo di essere in uno stato sicuro. Vediamo l'**algoritmo di richiesta del
   Se il sistema è in uno **stato sicuro**, allora la richiesta può essere soddisfatta. Se il sistema è in uno **stato insicuro**, allora la richiesta viene rifiutata e il sistema mantiene il suo stato originale.
 
 ### Rilevamento dello stallo
-
 In questo caso si permette al sistema di entrare in stallo, ma si rileva la situazione  attraverso un algoritmo di rilevamento e si ripristina il sistema. <br>
 Nel caso di una singola istanza per risorse possiamo usare il grafo di attesa per individuare eventuali cicli. Il grafo di attesa ha come vertici i processi; egli archi P<sub>i</sub>->P<sub>j</sub> tali che il processo i è in attesa del processo j. <br>
 
@@ -1727,7 +1678,6 @@ Ogni processo userebbe 4MB per la sua tabella delle pagine. E' decisamente tropp
 Vediamo altre soluzioni. 
 
 #### Paginazione gerarchica 
-
 Divide l'indirizzo logico in tabelle delle pagine multiple. Una tecnica semplice è la tabella delle pagine a due livelli:
 
 + L'indirizzo logico (32 bit con pagine da 4K) è diviso in 2 parti:
