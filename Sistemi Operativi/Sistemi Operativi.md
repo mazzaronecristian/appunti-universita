@@ -1911,5 +1911,10 @@ L'implementazione può essere fatta in due modi:
 Questa tecnica deve essere implementata in hardware, ma è molto costosa. In alternativa, esistono delle versioni approssimate che aggiungono un bit che indica se la pagina è riferita e scelgono la pagina con bit a 0 per un certo lasso di tempo.
 
 ### Thrashing
-Se un processo non ha abbastanza pagine in memoria, la frequenza dei page fault è molto alta. Questo
+Se un processo non ha abbastanza pagine in memoria, la frequenza dei page fault è molto alta. Questo porta a un peggioramento delle performance: 
++ Basso utilizzo della CPU
++ il sistema operativo pensa di poter incrementare il grado di multiprogrammazione
++ un altro processo aggiunto al sistema...che peggiora ulteriormente la situazione
+Questo problema è detto thrashing: il sistema è occupato quasi esclusivamente a fare swap delle pagine da e al disco. 
+
 
