@@ -1662,12 +1662,10 @@ La maggior parte del tempo di swap è il tempo di trasferimento, che è direttam
 ![swapping](images/swapping.png)
 
 Oggi in realtà non è così semplice, ci sono tecniche più articolate. Introduciamo infatti due concetti: **spazio di indirizzamento logico** e **spazio di indirizzamento fisico**, fondamentali per la gestione della memoria. <br>
-> con **spazio di indirizzamento logico** si intende un'area di memoria che un programma o un processo può utilizzare. È uno spazio di indirizzamento astratto che viene assegnato a ogni processo. La memoria logica si presenta come uno spazio continuo di indirizzi che può essere utilizzato dal programma per memorizzare e accedere ai dati. In altre parole, è la vista che il processo ha sulla memoria e dipende dal modello di programmazione utilizzato. Ad esempio, un programma potrebbe vedere la sua memoria logica come un array di byte, mentre un altro programma potrebbe utilizzare una struttura dati complessa.
-> Con spazio di indirizzamento fisico invece d
-> 
+> + con **spazio di indirizzamento logico** si intende un'area di memoria che un programma o un processo può utilizzare. È uno spazio di indirizzamento astratto che viene assegnato a ogni processo. La memoria logica si presenta come uno spazio continuo di indirizzi che può essere utilizzato dal programma per memorizzare e accedere ai dati. In altre parole, è la vista che il processo ha sulla memoria e dipende dal modello di programmazione utilizzato. Ad esempio, un programma potrebbe vedere la sua memoria logica come un array di byte, mentre un altro programma potrebbe utilizzare una struttura dati complessa.
+> + Con **spazio di indirizzamento fisico** invece ci si riferisce alla memoria hardware effettiva presente nel sistema. È la memoria reale, costituita da RAM (Random Access Memory) o altri dispositivi di archiviazione, come dischi rigidi o SSD. La memoria fisica rappresenta gli effettivi componenti e circuiti che conservano i dati e può essere indirizzata direttamente dall'hardware del sistema. È la memoria concreta che viene utilizzata per archiviare i dati e le istruzioni dei programmi in esecuzione.
 
-
-Un indirizzo logico è u indirizzo generato dalla CPU; chiamato anche indirizzo virtuale. Un indirizzo fisico è un indirizzo visto dalla unità di memoria. Ogni processo ha il proprio spazio di indirizzi logici e **ogni processo è isolato dagli altri**, infatti un processo non può accedere volontariamente o involontariamente agli spazi di memoria degli altri processi. <br>
+Un indirizzo logico è un indirizzo generato dalla CPU; chiamato anche **indirizzo virtuale**. Un indirizzo fisico è un indirizzo visto dalla unità di memoria. Ogni processo ha il proprio spazio di indirizzi logici e **ogni processo è isolato dagli altri**, infatti un processo non può accedere volontariamente o involontariamente agli spazi di memoria degli altri processi. <br>
 Più spazi di indirizzi logici devono essere associati allo stesso spazio di indirizzi fisici. 
 
 ### Memory-Management Unit (MMU)
@@ -1870,4 +1868,9 @@ Per fare questo controllo viene usato il bit di validità previsto per la gestio
 
 ![bit-validita](images/bit-validita.png)
 
-durante la traduzione dell'indirizzo, se il bit è a 0, allora si genera una eccezione di tipo **page fault** e la pagina viene caricata in memoria 
+durante la traduzione dell'indirizzo, se il bit è a 0, allora si genera una eccezione di tipo **page fault** e la pagina viene caricata in memoria: il SO individua un frame libero e vi carica la pagina desiderata; imposta il bit di validità a 1; fa ripartire l'istruzione fallita. 
+
+![page-fault](images/page-fault.png)
+
+
+
