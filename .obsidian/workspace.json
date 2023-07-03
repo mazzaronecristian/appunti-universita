@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "ee60c6f49fa561d1",
@@ -164,7 +165,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4b1af86097b9749f",
+  "active": "cefb32d794c214bc",
   "lastOpenFiles": [
     "Pasted image 20230703114905.png",
     "Sistemi Operativi/Sistemi Operativi.md",

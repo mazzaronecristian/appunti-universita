@@ -1910,4 +1910,6 @@ L'implementazione può essere fatta in due modi:
 + Con uno stack: ogni volta che una pagina viene usata, viene inserita in testa allo stack; in fondo allo stack si troverà la pagina che è stata usata meno di recente.
 Questa tecnica deve essere implementata in hardware, ma è molto costosa. In alternativa, esistono delle versioni approssimate che aggiungono un bit che indica se la pagina è riferita e scelgono la pagina con bit a 0 per un certo lasso di tempo.
 
-### Trashing
+### Thrashing
+Se un processo non ha abbastanza pagine in memoria, la frequenza dei page fault è molto alta. Questo
+
