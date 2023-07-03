@@ -1882,5 +1882,9 @@ Introduciamo un parametro: Frequenza di Page Fault p (0<p<1).
 Il tempo effettivo di accesso (EAT) diventa: 
 + EAT = *(1-p)  accesso in memoria + p (tempo di page fault+ [tempo di swap page out] + tempo swap page in + tempo restart istruzione)*
 
+### Sostituzione delle pagine
+
+Può accadere che il sistema stia usando tutta la memoria disponibile. In questo caso il SO trova la lista dei frame liberi vuota e deve scegliere quale liberare. In generale, il frame da riusare va prima scritto su disco e poi sostituito con il nuovo frame. Quest'ultimo passo può essere evitato, se la pagina non è stata modificata.
+
 
 
