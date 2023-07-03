@@ -1904,7 +1904,7 @@ Riprendiamo la sequenza precedente:
 
 ![sostituzione-lru](images/sostituzione-lru.png)
 
-La sostituzione LRU non soffre della anomalia di Belady.
+La sostituzione LRU non soffre della anomalia di **Belady**.
 L'implementazione può essere fatta in due modi:
 + Con un contatore: viene incrementato ad ogni accesso in memoria ed è associato a ogni uso di una pagina; viene scelta la pagina con il valore più piccolo.
 + Con uno stack: ogni volta che una pagina viene usata, viene inserita in testa allo stack; in fondo allo stack si troverà la pagina che è stata usata meno di recente.
@@ -1915,11 +1915,14 @@ Se un processo non ha abbastanza pagine in memoria, la frequenza dei page fault 
 + Basso utilizzo della CPU
 + il sistema operativo pensa di poter incrementare il grado di multiprogrammazione
 + un altro processo aggiunto al sistema...che peggiora ulteriormente la situazione
-Questo problema è detto trashing: il sistema è occupato quasi esclusivamente a fare swap delle pagine da e al disco. 
+Questo problema è detto **trashing**: *il sistema è occupato quasi esclusivamente a fare swap delle pagine da e al disco*. 
 
-Gli effetti di questa complicazione possono essere limitati, applicando un algoritmo di sostituzione locale: se un processo entra in trashing, durante il page fault può riusare solo un frame già posseduto da lui, non può rubare frame ad altri processi che entrerebbero a loro volta in trashing. In ogni caso, il trashing rallenta indirettamente anche l'esecuzione di altri processi, aumentando il tempo di gestione del page fault. 
+Gli effetti di questa complicazione possono essere limitati, applicando un **algoritmo di sostituzione locale**: se un processo entra in trashing, durante il page fault può riusare solo un frame già posseduto da lui, non può rubare frame ad altri processi che entrerebbero a loro volta in trashing. In ogni caso, il trashing rallenta indirettamente anche l'esecuzione di altri processi, aumentando il tempo di gestione del page fault. 
 Un altro modo per evitare il trashing è quello di far memorizzare a ogni processo in esecuzione i frame che gli servono in quel momento (working-set), generando pochi page fault.
 
-Il working-set è definito come l'insieme delle pagine riferite dal processo in un certo numero di riferimenti in memoria. La dimensione del working set cambia durante l'esecuzione del processo,  
+Il **working-set** è definito come l'insieme delle pagine riferite dal processo in un certo numero di riferimenti in memoria. La dimensione del working-set cambia durante l'esecuzione del processo, il quale dovrà cambiare località. Il sistema operativo deve sapere in ogni momento la dimensione di tutti i working-set.
+Il trashing non si verifica se:
++ la somma delle dimensioni dei working-set è inferiore al numero di frame disponibili
++ se ciò non accade, il SO seleziona un processo e lo sospende, lo salva su disco e libera tutti i frame, il processo rientrerà in esecuzione quando ci sarà memoria libera a sufficienza per il suo working-set
 
 
