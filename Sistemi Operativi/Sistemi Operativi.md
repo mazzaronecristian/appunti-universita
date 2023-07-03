@@ -1850,5 +1850,8 @@ Ci sono altre architetture come la ARM e l'Architettura x86 a 64 bit. Vedere le 
 
 ## Memoria virtuale
 
+La memoria virtuale consiste nella separazione della memoria logica dalla memoria fisica. Si basa sul fatto che solo una parte del programma ha la necessità di essere in memoria per esse eseguito, e che non tutti i dati in memoria vengono utilizzati contemporaneamente. 
+Serve ad aumentare il grado di multiprogrammazione del sistema e viene implementata attraverso la paginazione su richiesta. 
 
+![memoria-virtuale](images/memoria-virtuale.png)
 

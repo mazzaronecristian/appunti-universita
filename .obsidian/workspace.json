@@ -150,7 +150,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 303.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -163,8 +163,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "9648b5520d533383",
+  "active": "4b1af86097b9749f",
   "lastOpenFiles": [
+    "images/memoria-virtuale.png.md",
+    "Sistemi Operativi/Sistemi Operativi.md",
+    "images",
+    "Sistemi Operativi/images/memoria-virtuale.png",
     "Untitled",
     "Sistemi Operativi/images/architettura-vmware.png",
     "Sistemi Operativi/images/architettura-intel.png",
@@ -175,8 +179,6 @@
     "Sistemi Operativi/images/TLB-paginazione.png",
     "Sistemi Operativi/images/tabella-pagine-invertita.png",
     "Sistemi Operativi/images/tabella-due-livelli.png",
-    "Sistemi Operativi/images/system-call.png",
-    "Sistemi Operativi/Sistemi Operativi.md",
     "Sistemi Operativi/images",
     "Sistemi Operativi"
   ]
