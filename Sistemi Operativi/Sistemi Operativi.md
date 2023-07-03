@@ -1859,6 +1859,10 @@ La memoria virtuale è vista come un'estensione della memoria fisica.
 
 La **paginazione su richiesta** porta una pagina in memoria solo quando è necessario. Questo permette di aumentare il grado di multiprogrammazione del sistema e diminuisce la memoria necessaria. 
 Se una pagina è necessaria, allora si referenzia: 
-
 + se il riferimento è errato, allora si verifica un abort;
-+ se non è in memoria, allora la pagine viene 
++ se non è in memoria, allora la pagine viene caricata in memoria
+Per fare questo controllo viene usato il bit di validità previsto per la gestione della memoria con paginazione. Ogni riga della tabella delle pagine ha un bit valido-invalido (=1 se la pagina è in memoria). Il bit è inizializzato a 0 per ogni pagina. 
+
+![bit-validita](images/bit-validita.png)
+
+durante la traduzione dell'indirizzo, se il bit è a 0, allora si genera una eccezione di tipo **page fault** e la pagina viene caricata in memoria 
