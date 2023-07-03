@@ -1885,6 +1885,16 @@ Il tempo effettivo di accesso (EAT) diventa:
 ### Sostituzione delle pagine
 
 Può accadere che il sistema stia usando tutta la memoria disponibile. In questo caso il SO trova la lista dei frame liberi vuota e deve scegliere quale liberare. In generale, il frame da riusare va prima scritto su disco e poi sostituito con il nuovo frame. Quest'ultimo passo può essere evitato, se la pagina non è stata modificata.
+Per ogni processo andiamo a considerare la sequenza delle pagine utilizzate, con tenendo di conto dei riferimento immediatamente successivi alla stessa pagina. In generale. aumentando il numero di frame, i page fault diminuiranno. 
+
+#### Sostituzione FIFO
+
+Si sostituisce la pagina presente da più tempo. Supponiamo che un processo abbia questa successione dei riferimenti: 
++ 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1
+e supponiamo di avere 3 frame in memoria
+
+![sostituzione-fifo](images/sostituzione-fifo.png)
+
 
 
 
