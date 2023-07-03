@@ -1846,4 +1846,9 @@ Per la paginazione si usa una tabella delle pagine a due livelli:
 Si possono avere pagine da 4KB o d 4MB (questo attributo è indicato da un flag detto PageSize, nella directory delle pagine)
 Con 32 bit si possono codificare 4GB di memoria, che non è abbastanza. Per questo viene introdotta La Page Address Extension, una paginazione su 3 livelli (2 bit, 9 bit, 9 bit, 12 bit). La tabella delle pagine in questo caso usa 24 bit per identificare il frame, portando il limite superiore della memoria a 64GB.
 
-Ci sono altre rchitetture come la ARM e l'Architettura x86 a 64 bit. Vedere le slide. 
+Ci sono altre architetture come la ARM e l'Architettura x86 a 64 bit. Vedere le slide. 
+
+## Memoria virtuale
+
+
+
